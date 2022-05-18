@@ -21,36 +21,22 @@ export default function Grid({ $app, initState, onSearch }) {
 
     let sortOrder = ''
     let sortingFlag = true
-    let cnt = 0
     const sort = (column) => {
         if (sortOrder != column) {
-            console.log(sortOrder, column)
             sortingFlag = true
-            cnt = 0
         }
-        if (cnt > 3) {
-            cnt = 0
-        }
-        cnt=cnt+1
-        if (cnt===3) {
-            let nextState = [...this.state.data]
-            this.setState({
-                ...this.state,
-                results: nextState,
-            })
-        } else {
-            let nextState = {}
-            nextState = this.state.results.sort((a, b) => {
-                let x = a[column]
-                let y = b[column]
-                if (sortingFlag ? x < y : x > y) return -1;
-            })
-            sortingFlag = !sortingFlag
-            this.setState({
-                ...this.state,
-                results: nextState,
-            })
-        }
+        let nextState = {}
+        let copyResults = [...this.state.results]
+        nextState = copyResults.sort((a, b) => {
+            let x = a[column]
+            let y = b[column]
+            if (sortingFlag ? x < y : x > y) return -1;
+        })
+        sortingFlag = !sortingFlag
+        this.setState({
+            ...this.state,
+            results: nextState,
+        })
         sortOrder = column
     }
 
