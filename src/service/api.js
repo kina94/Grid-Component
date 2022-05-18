@@ -1,4 +1,4 @@
-const API_URL = 'https://randomuser.me/api/?results=50&noinfo'
+const API_URL = 'https://randomuser.me/api/?results=50&inc=picture,name,gender,email,phone,registered&noinfo'
 export const api = async() => {
     try{
         const res = await fetch(API_URL)

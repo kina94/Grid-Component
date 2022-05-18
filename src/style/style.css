@@ -1,0 +1,38 @@
+.bluetop {
+  border-collapse: collapse;
+  border-top: 3px solid #168;
+  table-layout:fixed;
+  width:100%;
+}  
+.bluetop th {
+  color: #168;
+  background: #f0f6f9;
+}
+.bluetop th, .bluetop td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align:center;
+  
+}
+.bluetop th:first-child, .bluetop td:first-child {
+  border-left: 0;
+}
+.bluetop th:last-child, .bluetop td:last-child {
+  border-right: 0;
+}
+
+.filter{
+  font-size:14px;
+  padding:20px;
+  border-radius:5px;
+  margin-bottom:10px;
+  width:30%;
+  background-color:white;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border:1px solid #f0f6f9;
+}
+
+.filter:focus{
+  background-color: #f0f6f9;
+  outline:none;
+}

@@ -1,3 +1,3 @@
-import App from './core/App.js'
+import App from './src/core/App.js'
 
 new App(document.querySelector('#App'))
