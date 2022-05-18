@@ -85,7 +85,6 @@ export default function Grid({ $app, initState, onSearch }) {
             try {
                 let nextData = this.state.data.filter(el =>
                     el['이름']
-                        .replace(' ', '')
                         .toLowerCase()
                         .includes(e.target.value.toLowerCase())) // 대소문자 모두 포함
                 if (nextData != null) {
