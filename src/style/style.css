@@ -7,6 +7,13 @@
 .bluetop th {
   color: #168;
   background: #f0f6f9;
+  cursor:pointer;
+}
+
+.bluetop th:hover{
+  background-color:#D8E2E7;
+  transition:all 0.15s ease-in;
+
 }
 .bluetop th, .bluetop td {
   padding: 10px;
