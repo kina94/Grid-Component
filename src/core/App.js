@@ -12,11 +12,11 @@ export default function App($app) {
             return { '사진': medium, '이름': name, '성별': gender, '나이': age, '이메일': email, '가입일': date }
         })
         grid.setState({
-            results: obj,
-            data: obj
+            results: [...obj],
+            data: [...obj]
         })
     }
-    
+
     const fetchApi = async () => {
         const data = await api()
         return data.results

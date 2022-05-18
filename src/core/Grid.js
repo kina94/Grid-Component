@@ -19,6 +19,41 @@ export default function Grid({ $app, initState, onSearch }) {
         this.render()
     }
 
+    let sortOrder = ''
+    let sortingFlag = true
+    let cnt = 0
+    const sort = (column) => {
+        if (sortOrder != column) {
+            console.log(sortOrder, column)
+            sortingFlag = true
+            cnt = 0
+        }
+        if (cnt > 3) {
+            cnt = 0
+        }
+        cnt=cnt+1
+        if (cnt===3) {
+            let nextState = [...this.state.data]
+            this.setState({
+                ...this.state,
+                results: nextState,
+            })
+        } else {
+            let nextState = {}
+            nextState = this.state.results.sort((a, b) => {
+                let x = a[column]
+                let y = b[column]
+                if (sortingFlag ? x < y : x > y) return -1;
+            })
+            sortingFlag = !sortingFlag
+            this.setState({
+                ...this.state,
+                results: nextState,
+            })
+        }
+        sortOrder = column
+    }
+
     this.render = () => {
         if (this.state.results) {
             this.$grid.innerHTML =
@@ -26,7 +61,9 @@ export default function Grid({ $app, initState, onSearch }) {
             <thead>
             <tr>
             ${Object.keys(this.state.results[0]).map(column => {
-                    return `<th>${column}</th>`
+                    return `<th id='column'>${column}
+                    <span></span>
+                    </th>`
                 }).join('')
                 }
             </tr>
@@ -46,31 +83,47 @@ export default function Grid({ $app, initState, onSearch }) {
             `
         }
     }
-    this.$input.addEventListener('keyup', (e) => {
-        try{
-            let nextData = this.state.data.filter(el =>
-            el['이름']
-            .replace(' ','')
-            .toLowerCase() 
-            .includes(e.target.value.toLowerCase())) // 대소문자 모두 포함
-            if (nextData != null) {
+
+    //헤더 정렬 이벤트
+    const handleSortEvent = () => {
+        this.$grid.addEventListener('click', (e) => {
+            if (e.target.id === 'column') {
+                sort(e.target.innerText)
+            }
+        })
+    }
+
+    // 검색창 이벤트
+    const handleInputEvent = () => {
+        this.$input.addEventListener('keyup', (e) => {
+            try {
+                let nextData = this.state.data.filter(el =>
+                    el['이름']
+                        .replace(' ', '')
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase())) // 대소문자 모두 포함
+                if (nextData != null) {
+                    this.setState({
+                        ...this.state,
+                        results: nextData
+                    })
+                }
+            } catch {
+                return
+            }
+        })
+
+        this.$input.addEventListener('click', (e) => { // 인풋 클릭 시 초기화
+            if (e.target.value != '') {
+                e.target.value = ''
                 this.setState({
                     ...this.state,
-                    results: nextData
+                    results: this.state.data
                 })
             }
-        } catch{
-            return
-        }
-    })
+        })
+    }
 
-    this.$input.addEventListener('click', (e)=>{ // 인풋 클릭 시 초기화
-        if(e.target.value!=''){
-            e.target.value=''
-            this.setState({
-                ...this.state,
-                results: this.state.data
-            })
-        }
-    })
+    handleInputEvent()
+    handleSortEvent()
 }
