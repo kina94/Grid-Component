@@ -1,11 +1,12 @@
-export default function Grid({$app, initState}){
+export default function Grid({ $app, initState, onSearch }) {
 
     this.state = initState
+    this.onSearch = onSearch
 
     this.$input = document.createElement('input')
     this.$input.className = 'filter'
     this.$input.autofocus = 'true'
-    this.$input.placeholder = '검색어를 입력하세요.'
+    this.$input.placeholder = '이름을 입력하세요.'
     $app.appendChild(this.$input)
 
     this.$grid = document.createElement('table')
@@ -13,55 +14,63 @@ export default function Grid({$app, initState}){
     $app.appendChild(this.$grid)
 
 
-    this.setState = (nextState) =>{
+    this.setState = (nextState) => {
         this.state = nextState
         this.render()
     }
 
-    let columns = ['사진', '이름', '성별', '나이', '이메일', '가입일']
-    const getTbody = (item) =>{
-            let {email, gender, name:{first, last}, picture:{medium}, registered:{date, age}} = item
-            let name = `${first} ${last}`
-            let obj = {'사진':medium, '이름':name, '성별':gender, '나이':age, '이메일':email, '가입일':date}
-            let template =
-            `
-            <tr>
-            ${
-                Object.values(obj).map((value)=>{
-                    let content = value.toString().includes('.jpg') ? `<img src=${value}>` : value
-                    return `<td>
-                    ${content}
-                    </td>`
-                })
-            }
-            </tr>
-            `
-            return template
-    }
-
     this.render = () => {
-        if(this.state){
-            this.$grid.innerHTML=
-            `
+        if (this.state.results) {
+            this.$grid.innerHTML =
+                `
             <thead>
             <tr>
-            ${
-                columns.map(column=>{
+            ${Object.keys(this.state.results[0]).map(column => {
                     return `<th>${column}</th>`
                 }).join('')
-            }
+                }
             </tr>
             </thead>
             <tbody>
-            ${
-                this.state.map(item=>{
-                    return getTbody(item)
+            ${this.state.results.map(result => {
+                    return `<tr>
+                    ${Object.values(result).map(value => {
+                        let content = value.toString().includes('.jpg') ? `<img src=${value}></img>` : value
+                        return `
+                        <td>${content}</td>
+                        `
+                    }).join('')} </tr>`
                 })
-            }
+                }
             </tbody>
             `
         }
     }
+    this.$input.addEventListener('keyup', (e) => {
+        try{
+            let nextData = this.state.data.filter(el =>
+            el['이름']
+            .replace(' ','')
+            .toLowerCase() 
+            .includes(e.target.value.toLowerCase())) // 대소문자 모두 포함
+            if (nextData != null) {
+                this.setState({
+                    ...this.state,
+                    results: nextData
+                })
+            }
+        } catch{
+            return
+        }
+    })
 
-    this.render()
+    this.$input.addEventListener('click', (e)=>{ // 인풋 클릭 시 초기화
+        if(e.target.value!=''){
+            e.target.value=''
+            this.setState({
+                ...this.state,
+                results: this.state.data
+            })
+        }
+    })
 }
