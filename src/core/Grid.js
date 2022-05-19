@@ -19,10 +19,10 @@ export default function Grid({ $app, initState, onSearch }) {
         this.render()
     }
 
-    let sortOrder = ''
+    let sortColumn = ''
     let sortingFlag = true
-    const sort = (column) => {
-        if (sortOrder != column) {
+    const sortTable = (column) => {
+        if (sortColumn != column) {
             sortingFlag = true
         }
         let nextState = {}
@@ -37,7 +37,7 @@ export default function Grid({ $app, initState, onSearch }) {
             ...this.state,
             results: nextState,
         })
-        sortOrder = column
+        sortColumn = column
     }
 
     this.render = () => {
@@ -47,7 +47,7 @@ export default function Grid({ $app, initState, onSearch }) {
             <thead>
             <tr>
             ${Object.keys(this.state.results[0]).map(column => {
-                    return `<th id='column'>${column}
+                    return `<th class=${column} id='column'>${column}
                     <span></span>
                     </th>`
                 }).join('')
@@ -59,6 +59,7 @@ export default function Grid({ $app, initState, onSearch }) {
                     return `<tr>
                     ${Object.values(result).map(value => {
                         let content = value.toString().includes('.jpg') ? `<img src=${value}></img>` : value
+                        
                         return `
                         <td>${content}</td>
                         `
@@ -74,7 +75,7 @@ export default function Grid({ $app, initState, onSearch }) {
     const handleSortEvent = () => {
         this.$grid.addEventListener('click', (e) => {
             if (e.target.id === 'column') {
-                sort(e.target.innerText)
+                sortTable(e.target.innerText)
             }
         })
     }
@@ -86,11 +87,20 @@ export default function Grid({ $app, initState, onSearch }) {
                 let nextData = this.state.data.filter(el =>
                     el['이름']
                         .toLowerCase()
-                        .includes(e.target.value.toLowerCase())) // 대소문자 모두 포함
+                        .includes(e.target.value.toLowerCase()))
+                        .map(item=>{
+                        let regex = new RegExp(e.target.value, 'gi')
+                        if(e.target.value === ''){
+                            return item = {...item}
+                        } else {
+                            return item = {...item, '이름' : item['이름'].replace(regex,`<span class='keyword'>${e.target.value}</span>`)}
+                        }
+                        
+                        }) // 대소문자 모두 포함
                 if (nextData != null) {
                     this.setState({
                         ...this.state,
-                        results: nextData
+                        results: nextData,
                     })
                 }
             } catch {
@@ -99,13 +109,11 @@ export default function Grid({ $app, initState, onSearch }) {
         })
 
         this.$input.addEventListener('click', (e) => { // 인풋 클릭 시 초기화
-            if (e.target.value != '') {
-                e.target.value = ''
-                this.setState({
-                    ...this.state,
-                    results: this.state.data
-                })
-            }
+            e.target.value = ''
+            this.setState({
+                ...this.state,
+                results: this.state.data
+            })
         })
     }
 

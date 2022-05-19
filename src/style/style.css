@@ -44,3 +44,10 @@
   background-color: #f0f6f9;
   outline:none;
 }
+
+.keyword {
+  padding:2px;
+  background-color: #f7e600;
+  color:black;
+  font-weight: bold;
+}
