@@ -7,9 +7,9 @@ export default function App($app) {
     const getProcessedData = async () => {
         const datas = await fetchApi()
         let obj = datas.map(data => {
-            let { email, gender, name: { first, last }, picture: { medium }, registered: { date, age } } = data
+            let { email, gender, name: { first, last }, picture: { large }, registered: { date, age } } = data
             let name = `${first} ${last}`
-            return { '사진': medium, '이름': name, '성별': gender, '나이': age, '이메일': email, '가입일': date }
+            return { '사진': large, '이름': name, '성별': gender, '나이': age, '이메일': email, '가입일': date }
         })
         grid.setState({
             results: [...obj],

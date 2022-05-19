@@ -7,6 +7,7 @@
 
 .bluetop img{
   width:100%;
+  max-width:150px;
 }
 .bluetop th {
   color: #168;
