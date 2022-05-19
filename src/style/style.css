@@ -4,11 +4,16 @@
   table-layout:fixed;
   width:100%;
 }  
+
+.bluetop img{
+  width:100%;
+}
 .bluetop th {
   color: #168;
   background: #f0f6f9;
   cursor:pointer;
 }
+
 
 .bluetop th:hover{
   background-color:#D8E2E7;
@@ -18,8 +23,8 @@
 .bluetop th, .bluetop td {
   padding: 10px;
   border: 1px solid #ddd;
-  text-align:center;
-  
+  text-align:center;  
+  word-break:break-all;
 }
 .bluetop th:first-child, .bluetop td:first-child {
   border-left: 0;
